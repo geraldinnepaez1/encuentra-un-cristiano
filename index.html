@@ -904,7 +904,7 @@ function account(){
  ${[['shopping-bag','Compra validada con tu código','1 pt por cada $1.000','+1'],['star','Deja una reseña','Con foto suman el doble','+15'],['user-plus','Invita a un amigo','Cuando haga su primera compra','+50'],['store','Recomienda un negocio','Si se registra en la plataforma','+100']].map(([i,t,s,v])=>`<div class="li"><span class="ico b">${ic(i)}</span><span class="t"><b>${t}</b><small>${s}</small></span><span class="ptsp">${v} ${v==='+1'?'pt':'pts'}</span></div>`).join('')}</div></section>
  <section class="sec"><div class="sec-h"><div><h2>Mis cupones</h2><p>3 guardados</p></div></div><div class="hscroll">${['saborcasa','aloha','lumen'].map(id=>couponT(BY[id])).join('')}</div></section>
  <button type="button" class="mybiz" onclick="go('panel')"><span class="logo" style="${grad(panelBiz)};width:44px;height:44px">AN</span><span class="t"><b>Mi negocio</b><small>Panel de Aloha Nutri-Cosmetic</small></span>${ic('chevron-right')}</button>
- <section class="sec"><div class="list">${[['heart','Negocios que sigo',S.follow.size+''],['bookmark','Guardados',S.saved.size+''],['bell','Notificaciones',''],['shield-check','Privacidad y seguridad','']].map(([i,t,v])=>`<button type="button" class="li" onclick="toast('${t}','${i}')"><span class="ico">${ic(i)}</span><span class="t"><b>${t}</b></span>${v?`<span class="v num">${v}</span>`:''}<span class="chev">${ic('chevron-right','s')}</span></button>`).join('')}</div></section>`}
+ <section class="sec"><div class="list"><button type="button" class="li" onclick="toggleTheme()"><span class="ico">${ic(document.documentElement.getAttribute('data-theme')==='dark'?'sun':'moon')}</span><span class="t"><b>Modo oscuro</b></span><span class="toggle ${document.documentElement.getAttribute('data-theme')==='dark'?'on':''}" role="switch" aria-checked="${document.documentElement.getAttribute('data-theme')==='dark'}"></span></button>${[['heart','Negocios que sigo',S.follow.size+''],['bookmark','Guardados',S.saved.size+''],['bell','Notificaciones',''],['shield-check','Privacidad y seguridad','']].map(([i,t,v])=>`<button type="button" class="li" onclick="toast('${t}','${i}')"><span class="ico">${ic(i)}</span><span class="t"><b>${t}</b></span>${v?`<span class="v num">${v}</span>`:''}<span class="chev">${ic('chevron-right','s')}</span></button>`).join('')}</div></section>`}
 
 function panel(){
  const b=panelBiz;const per=S.dPer;const mult=per==='7d'?.27:per==='30d'?1:2.9;
@@ -1035,8 +1035,9 @@ $('#scrim').onclick=closeSheet;
 $('#logoA').innerHTML=mark(42);
 /* theme toggle (per-viewer) */
 function applyTheme(t){if(t)document.documentElement.setAttribute('data-theme',t);else document.documentElement.removeAttribute('data-theme');const dark=t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;$('#themeBtn').innerHTML=ic(dark?'sun':'moon','s')+(dark?'Modo claro':'Modo oscuro')}
+window.toggleTheme=()=>{const cur=document.documentElement.getAttribute('data-theme')||'light';const nx=cur==='dark'?'light':'dark';try{localStorage.setItem('euc-theme',nx)}catch(e){}applyTheme(nx);render(true)};
 $('#themeBtn').onclick=()=>{const cur=document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');const nx=cur==='dark'?'light':'dark';try{localStorage.setItem('euc-theme',nx)}catch(e){}applyTheme(nx)};
-let saved=null;try{saved=localStorage.getItem('euc-theme')}catch(e){}applyTheme(saved);
+let saved=null;try{saved=localStorage.getItem('euc-theme')}catch(e){}applyTheme(saved||'light');
 render();
 </script>
 
